@@ -20,25 +20,34 @@ const dropZone = document.getElementById('drop-zone');
 const checkButton = document.getElementById('check-button');
 const levelText = document.getElementById('current-level');
 const mainMenu = document.getElementById('main-menu');
+const pilihLevel = document.getElementById('pilih-level');
 const gameContainer = document.getElementById('game-container');
 const customAlert = document.getElementById('custom-alert');
 const alertMessage = document.getElementById('alert-message');
 const clueText = document.getElementById('clue');
 const quitButton = document.getElementById('quitButton');
+const startButton = document.getElementById('startButton');
 
 document.addEventListener("DOMContentLoaded", function() {
     var backsound = document.getElementById("backsound");
-
-    mainMenu.addEventListener("click", function() {
+    
+    startButton.addEventListener("click", function() {
         backsound.play();
+        mainMenu.style.display = 'none';
+        pilihLevel.style.display = 'block';
     });
+    
+    quitButton.addEventListener('click', quitGame);
+    dropZone.addEventListener('dragover', dragOver);
+    dropZone.addEventListener('drop', drop);
+    checkButton.addEventListener('click', checkAnswer);
 });
 
 function startGame(level) {
     currentLevel = level;
     currentIndex = 0;
-    document.getElementById('quitButton').style.display = 'block';
-    mainMenu.style.display = 'none';
+    quitButton.style.display = 'block';
+    pilihLevel.style.display = 'none';
     gameContainer.style.display = 'block';
     initializeGame();
 }
@@ -90,13 +99,11 @@ function checkAnswer() {
     if (answer === levels[currentLevel].words[currentIndex]) {
         showAlert('Benar!');
         var audio = new Audio('sound/Correct Answer sound effect.mp3'); // Ganti dengan path file suara Anda
-        // Putar suara
         audio.play();
         nextLevel();
     } else {
         showAlert('Salah, coba lagi!');
         var audio = new Audio('sound/Wrong sound effect.mp3'); // Ganti dengan path file suara Anda
-        // Putar suara
         audio.play();
         dropZone.innerHTML = '';
     }
@@ -106,7 +113,7 @@ function nextLevel() {
     currentIndex++;
     if (currentIndex >= levels[currentLevel].words.length) {
         showAlert(`Selamat! Anda telah menyelesaikan level ${currentLevel + 1}!`);
-        mainMenu.style.display = 'block';
+        pilihLevel.style.display = 'block';
         gameContainer.style.display = 'none';
     } else {
         initializeGame();
@@ -131,16 +138,12 @@ function shuffle(array) {
 }
 
 function quitGame() {
-    mainMenu.style.display = 'block';
-    document.getElementById('quitButton').style.display = 'none';
+    pilihLevel.style.display = 'block';
+    quitButton.style.display = 'none';
     gameContainer.style.display = 'none';
 }
 
-quitButton.addEventListener('click', quitGame);
-dropZone.addEventListener('dragover', dragOver);
-dropZone.addEventListener('drop', drop);
-checkButton.addEventListener('click', checkAnswer);
-
 // Initialize the game by showing the main menu
 mainMenu.style.display = 'block';
+pilihLevel.style.display = 'none';
 gameContainer.style.display = 'none';

@@ -5,28 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Quiz Menyusun Huruf</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        #quitButton {
-            display: none; /* Sembunyikan tombol Quit secara default */
-        }
-    </style>
 </head>
 <body>
     <audio id="backsound" src="sound/Kevin MacLeod - Itty Bitty 8 Bit.mp3" loop></audio>
     <script src="game.js"></script>
+    
     <div id="main-menu">
-        <h1>Pilih Level</h1>
+        <h1>QUIZ MENYUSUN HURUF </h1>
+        <H6>game menyusun huruf acak menjadi sebuah nama hewan</H6>
+        <button id="startButton">Play</button>
+    </div>
+    
+    <div id="pilih-level" style="display: none;">
+        <h2>Pilih Level</h2>
         <button onclick="startGame(0)">Level 1</button>
         <button onclick="startGame(1)">Level 2</button>
         <button onclick="startGame(2)">Level 3</button>
     </div>
+
     <button id="quitButton">Quit</button>
-    <div id="game-container" style="display: none;">
+    
+    <div id="game-container">
         <div id="level-container">
             Level: <span id="current-level">1</span>
         </div>
         <div class="container">
-            <h1>Game Quiz Menyusun Huruf</h1>
             <div id="clue-container">
                 Clue: <span id="clue"></span>
             </div>
@@ -39,13 +42,14 @@
             <button id="check-button">Cek Jawaban</button>
         </div>
     </div>
-    <button id="quitButton">Quit</button>
-    <div id="custom-alert" class="custom-alert" style="display: none;">
+
+    <div id="custom-alert" class="custom-alert">
         <div class="custom-alert-content">
             <p id="alert-message"></p>
             <button onclick="closeAlert()">OK</button>
         </div>
     </div>
+    
     <script src="script.js"></script>
 </body>
 </html>

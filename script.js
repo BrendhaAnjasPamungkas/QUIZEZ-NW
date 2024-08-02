@@ -73,39 +73,85 @@ function initializeGame() {
     clueText.textContent = selectedClue; // Update clue text
 }
 
+function initializeGame() {
+    wordContainer.innerHTML = '';
+    dropZone.innerHTML = '';
+
+    let selectedAnimal = levels[currentLevel].words[currentIndex];
+    let selectedClue = levels[currentLevel].clues[currentIndex];
+    let shuffledWord = shuffle(selectedAnimal.split(''));
+
+    shuffledWord.forEach(letter => {
+        let letterElement = document.createElement('div');
+        letterElement.classList.add('letter');
+        letterElement.textContent = letter;
+        letterElement.draggable = true;
+        letterElement.addEventListener('dragstart', dragStart);
+        wordContainer.appendChild(letterElement);
+    });
+
+    levelText.textContent = currentLevel + 1; // Update level text
+    clueText.textContent = selectedClue; // Update clue text
+}
+
 function dragStart(event) {
-    event.dataTransfer.setData('text', event.target.textContent);
+    event.dataTransfer.setData('text/plain', event.target.textContent);
+    event.dataTransfer.effectAllowed = 'move';
+    draggedElement = event.target;
 }
 
 function dragOver(event) {
     event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
 }
 
 function drop(event) {
     event.preventDefault();
-    let letter = event.dataTransfer.getData('text');
+    let letter = event.dataTransfer.getData('text/plain');
+
     let letterElement = document.createElement('div');
     letterElement.classList.add('letter');
     letterElement.textContent = letter;
     dropZone.appendChild(letterElement);
+
+    if (draggedElement) {
+        draggedElement.parentNode.removeChild(draggedElement);
+        draggedElement = null;
+    }
 }
+
+let draggedElement = null;
 
 function checkAnswer() {
     let answer = '';
+    let droppedLetters = [];
+
     dropZone.querySelectorAll('.letter').forEach(letterElement => {
         answer += letterElement.textContent;
+        droppedLetters.push(letterElement.textContent);
     });
 
     if (answer === levels[currentLevel].words[currentIndex]) {
         showAlert('Benar!');
-        var audio = new Audio('sound/Correct Answer sound effect.mp3'); // Ganti dengan path file suara Anda
+        var audio = new Audio('sound/Correct Answer sound effect.mp3'); 
         audio.play();
         nextLevel();
     } else {
         showAlert('Salah, coba lagi!');
-        var audio = new Audio('sound/Wrong sound effect.mp3'); // Ganti dengan path file suara Anda
+        var audio = new Audio('sound/Wrong sound effect.mp3'); 
         audio.play();
+
         dropZone.innerHTML = '';
+        let shuffledDroppedLetters = shuffle(droppedLetters);
+
+        shuffledDroppedLetters.forEach(letter => {
+            let letterElement = document.createElement('div');
+            letterElement.classList.add('letter');
+            letterElement.textContent = letter;
+            letterElement.draggable = true;
+            letterElement.addEventListener('dragstart', dragStart);
+            wordContainer.appendChild(letterElement);
+        });
     }
 }
 
